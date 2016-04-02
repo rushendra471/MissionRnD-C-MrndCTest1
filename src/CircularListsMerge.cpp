@@ -32,7 +32,60 @@ struct node{
 	int data;
 	struct node *next;
 };
+
+struct node * getLength_make_sll(struct node *head, int *cnt){
+	if (head == NULL)
+		return NULL;
+	if (head->next == head){
+		*cnt = 1;
+		return head;
+	}
+
+	struct node *cur = NULL;
+	cur = head->next;
+	*cnt = 2;
+	while (cur->next != head){
+		cur = cur->next;
+		*cnt = *cnt + 1;
+	}
+	cur->next = NULL;
+	return head;
+}
+
+struct node * merge2LinkedLists(struct node *head1, struct node *head2) {
+	if (head1 == NULL)
+		return(head2);
+	else if (head2 == NULL)
+		return(head1);
+
+	struct node *result = NULL;
+
+	if (head1->data <= head2->data){
+		result = head1;
+		result->next = merge2LinkedLists(head1->next, head2);
+	}
+	else{
+		result = head2;
+		result->next = merge2LinkedLists(head1, head2->next);
+	}
+
+	return result;
+}
+
 int merge_circularlists(struct node **head1, struct node **head2){
 	//Returns Length of merged Sorted circular SLL and also points *head1 to final SLL .
-	return -1;
+	if (*head1 == NULL && *head2 == NULL)
+		return -1;
+	
+	int head1len = 0, head2len = 0;
+	
+	*head1 = merge2LinkedLists(getLength_make_sll(*head1, &head1len), getLength_make_sll(*head2, &head2len));
+	
+	struct node *cur = NULL;
+	cur = *head1;
+	while (cur->next != NULL)
+		cur = cur->next;
+	cur->next = *head1;
+
+	return head1len + head2len;
 }

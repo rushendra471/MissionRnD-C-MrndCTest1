@@ -31,7 +31,56 @@ Difficulty : Medium
 #include <stdio.h>
 #include <math.h>
 
+int findAP(int *arr, int len, int *start, int *end){
+	int i;
+
+	for (i = *start ; i < len - 1; i++){
+		if (arr[*start] - arr[*start + 1] == arr[i] - arr[i + 1])
+			*end = i + 1;
+		else{
+			if (*end - *start  > 1)
+				return 1;
+			else
+				*start = *end = i;
+
+		}
+	}
+}
+
 int * find_sequences(int *arr, int len){
 	//Return final array which has 6indexes [AP1_S,AP1_E,AP2_S,AP2_E,GP1_S,GP2_E]
-	return NULL;
+	if (arr == NULL || len <= 3)
+		return NULL;
+
+	int i, start = 0, end = 0, *res;
+	res = (int *)malloc(6 * sizeof(int));
+
+	findAP(arr, len, &start, &end);
+	res[0] = start;
+	res[1] = end;
+	
+	start = end;
+	findAP(arr, len, &start, &end);
+	res[2] = start;
+	res[3] = end;
+
+	start = 0;
+	end = 0;
+
+	for (i = 0; i < len - 1; i++){
+		if ((arr[start + 1] * 1.0) / arr[start] == (arr[i + 1] * 1.0) / arr[i])
+			end = i + 1;
+		else{
+			if (end - start > 1)
+				break;
+			else
+				start = end = i;
+
+		}
+	}
+
+	res[4] = start;
+	res[5] = end;
+
+	return res;
 }

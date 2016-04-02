@@ -28,7 +28,47 @@ struct node{
 	struct node *next;
 };
 
+void convertdate(struct node *date, int *d, int *m, int *y){
+	struct node *cur = date;
+	*d = (cur->data * 10) + cur->next->data;
+	cur = cur->next->next;
+	*m = (cur->data * 10) + cur->next->data;
+	cur = cur->next->next;
+	*y = (cur->data * 1000) + (cur->next->data * 100) + (cur->next->next->data * 10) + cur->next->next->next->data;
+
+}
+
+int get_length(struct node * head){
+	int cnt = 0;
+	while (head){
+		head = head->next;
+		cnt++;
+	}
+	return cnt;
+}
+
+int get_difference(int d1, int d2, int m1, int m2, int y1, int y2){
+	int cnt = 0, i;
+	int daysinmon[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	for (i = y1 + 1; i < y2; i++){
+		if (i % 4 == 0)
+			cnt += 366;
+		else
+			cnt += 365;
+	}
+
+}
 
 int between_days(struct node *date1head, struct node *date2head){
-	return -1;
+	if (date1head == NULL || date2head == NULL || get_length(date1head) > 8 || get_length(date2head) > 8)
+		return -1;
+
+	int d1, d2, m1, m2, y1, y2;
+	convertdate(date1head, &d1, &m1, &y1);
+	convertdate(date2head, &d2, &m2, &y2);
+	if (y1 < y2)
+		return get_difference(d1, d2, m1, m2, y1, y2);
+	else
+		return get_difference(d2, d1, m2, m1, y2, y1);
+	
 }
