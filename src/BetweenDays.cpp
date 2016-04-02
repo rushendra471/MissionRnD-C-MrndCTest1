@@ -46,16 +46,42 @@ int get_length(struct node * head){
 	}
 	return cnt;
 }
+int monDays(int d1, int m1, int y1){
+	int mon = 0, days, i;
+	int daysinmon[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	for (i = m1 + 1; i < 13; i++){
+		if (i == 1){
+			if (y1 % 4 == 0)
+				mon += 29;
+			else
+				mon += 28;
+		}
+		else
+			mon += daysinmon[m1 - 1];
+	}
+	if (y1 % 4 == 0){
+		if (m1 == 2)
+			days = 29;
+		else
+			days = 28;
+	}
+	else
+		days = daysinmon[m1 - 1];
+	days = days - d1 - 1;
+	return mon + days;
+}
 
 int get_difference(int d1, int d2, int m1, int m2, int y1, int y2){
 	int cnt = 0, i;
-	int daysinmon[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	
 	for (i = y1 + 1; i < y2; i++){
 		if (i % 4 == 0)
 			cnt += 366;
 		else
 			cnt += 365;
 	}
+	int days1 = monDays(d1, m1, y1);
+	int days2 = 0;
 
 }
 
